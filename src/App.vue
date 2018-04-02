@@ -2,7 +2,7 @@
   <div id="app">
     <!--<img src="./assets/logo.png">
     <router-view/>-->
-    <header-layout></header-layout>
+    <header-layout :seller="seller"></header-layout>
     <div id='tab' class="tab">
     	<div class="item-tab">
     		<router-link :to="{path:'/good'}">商品</router-link>
@@ -23,7 +23,23 @@
 <script>
 	import headerLayout from './components/header/headerLayout.vue'
 	export default {
+		created:function(){
+			this.$http.get(this.$store.state.api.getData).then(function(response){
+				//成功
+				//seller
+				let seller = response.data.seller;
+				this.seller = seller
+			},function(err){
+				//失败
+				console.log(err)
+			})
+		},
 	  name: 'App',
+	  data:function(){
+	  	return {
+	  		seller:''
+	  	}
+	  },
 	  components:{
 	  	headerLayout,
 	  }
@@ -35,7 +51,6 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 .tab{
