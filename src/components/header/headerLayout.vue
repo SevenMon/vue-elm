@@ -179,7 +179,7 @@
 		background-repeat: no-repeat;
 		border-radius: 2px;
 		margin-right: 4px;
-		margin-top: 7px;
+		margin-top: 8px;
 	}
 	.header .header-notice .notice-sale{
 		font-size: 12px;
