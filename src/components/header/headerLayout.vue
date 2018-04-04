@@ -22,13 +22,13 @@
 					</span>
 				</div>
 			</div>
-			<div class="sale-count">
+			<div class="sale-count" @click="showDetail">
 				<span class="sale-count-numer">
 					{{seller.supports.length}}个
 				</span><i class="icon-keyboard_arrow_right"></i>
 			</div>
 		</div>
-		<div class="header-notice">
+		<div class="header-notice" @click="showDetail">
 			<span class="notice-img"></span><span class="notice-sale">
 				{{seller.bulletin}}
 			</span><i class="icon-keyboard_arrow_right"></i>
@@ -36,13 +36,36 @@
 		<div class="back-img">
 			<img width="100%" height="100%" :src="seller.avatar" />
 		</div>
+		<div v-show="showStatus" class="detail">
+			<div class="detail-content clearfix">
+				<div class="detail-content-main"></div>
+			</div>
+			<div class="detail-close">
+				<i class="icon-close" @click="closeDetail"></i>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 	export default {
-		props: ['seller'],
+		props: ['seller','appblur'],
 		name: 'headerLayout',
+		data:function(){
+			return {
+				showStatus:false
+			}
+		},
+		methods:{
+			showDetail:function(){
+				this.showStatus = true,
+				this.$emit('emitappblur')
+			},
+			closeDetail:function(){
+				this.showStatus = false,
+				this.$emit('emitappblur')
+			}
+		}
 	}
 </script>
 
@@ -51,6 +74,7 @@
 		background-color: rgba(7, 17, 27, 0.5);
 		color: rgb(255,255,255);
 		position: relative;
+		overflow: hidden;
 	}
 	.header .back-img{
 		position: absolute;
@@ -193,4 +217,37 @@
 	    position: absolute;
     	right: 12px;
 	}
+	.header .detail{
+		background-color: rgba(7,17,27,0.8);
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+		overflow: auto;
+	}
+	.header .detail .detail-content{
+		min-height: 100%;
+	}
+	.header .detail .detail-content .detail-content-main{
+		padding: 64px 36px;
+	}
+	.header .detail .detail-close{
+		width: 32px;
+		height: 32px;
+		position: relative;
+		margin: -64px auto 0 auto;
+		font-size: 32px;
+	}
+	.clearfix{
+     display: inline-block;
+	}
+	.clearfix:after {
+	     content: ".";
+	     display: block;
+	     height: 0;	
+	     clear: both;
+	     visibility: hidden;
+	}  
 </style>
