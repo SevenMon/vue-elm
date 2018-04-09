@@ -16,13 +16,13 @@
 				<div class="content-send">
 					{{seller.description}}/{{seller.deliveryTime}}分钟送达
 				</div>
-				<div class="content-sale">
+				<div v-if="seller.supports" class="content-sale">
 					<span class="sale-img" :class="'sale-img-sel-' + seller.supports[0].type"></span><span class="sale-text">
 						{{seller.supports[0].description}}
 					</span>
 				</div>
 			</div>
-			<div class="sale-count" @click="showDetail">
+			<div v-if="seller.supports" class="sale-count" @click="showDetail">
 				<span class="sale-count-numer">
 					{{seller.supports.length}}个
 				</span><i class="icon-keyboard_arrow_right"></i>
@@ -41,7 +41,31 @@
 				<div class="detail-content-main">
 					<h1 class="main-name">{{ seller.name }}</h1>
 					<div class="star-wrapper">
-						<star :size='size' :score='1.6'></star>
+						<star :size='size' :score='seller.score'></star>
+					</div>
+					<div class="main-sale-title">
+						<div class="sale-left-line"></div>
+						<div class="sale-title">优惠信息</div>
+						<div class="sale-left-right"></div>
+					</div>
+
+					<ul v-if="seller.supports" class="main-sale-content">
+						<li v-for="(item, index) in seller.supports" class="sale-item">
+							<span class="sale-img" :class="'sale-img-sel-' + item.type">
+								
+							</span>
+							<span class="sale-text">
+								{{item.description}}
+							</span>
+						</li>
+					</ul>
+					<div class="main-sale-title">
+						<div class="sale-left-line"></div>
+						<div class="sale-title">商家公告</div>
+						<div class="sale-left-right"></div>
+					</div>
+					<div class="main-notice">
+						<p class="main-notice-content">{{seller.bulletin}}</p>
 					</div>
 				</div>
 			</div>
@@ -79,7 +103,7 @@
 	}
 </script>
 
-<style>
+<style>	
 	.header {
 		background-color: rgba(7, 17, 27, 0.5);
 		color: rgb(255,255,255);
@@ -185,6 +209,50 @@
 		border-radius: 2px;
 		margin-right: 4px;
 	}
+	.header .header-content .content-info .content-sale .sale-img-sel-1{
+		width: 12px;
+		height: 12px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/discount_1@2x.png);
+		background-size: 12px 12px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 4px;
+	}
+	.header .header-content .content-info .content-sale .sale-img-sel-2{
+		width: 12px;
+		height: 12px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/guarantee_1@2x.png);
+		background-size: 12px 12px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 4px;
+	}
+	.header .header-content .content-info .content-sale .sale-img-sel-3{
+		width: 12px;
+		height: 12px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/invoice_1@2x.png);
+		background-size: 12px 12px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 4px;
+	}
+	.header .header-content .content-info .content-sale .sale-img-sel-4{
+		width: 12px;
+		height: 12px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/special_1@2x.png);
+		background-size: 12px 12px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 4px;
+	}
 	.header .header-content .content-info .content-sale .sale-text{
 		font-size: 12px;
 		color: rgb(255, 255, 255);
@@ -242,7 +310,7 @@
 		width: 100%;
 	}
 	.header .detail .detail-content .detail-content-main{
-		padding: 64px 36px;
+		padding: 64px 0px;
 	}
 	.header .detail .detail-content .detail-content-main .main-name{
 		font-size: 16px;
@@ -273,4 +341,114 @@
 	     clear: both;
 	     visibility: hidden;
 	}  
+	.header .detail .detail-content .detail-content-main .main-sale-title{
+		display: flex;
+	    width: 80%;
+	    text-align: center;
+	    margin: 38px auto 24px auto;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-title .sale-left-line{
+		flex:1;
+		display: inline-block;
+		border-bottom: 1px solid rgba(255,255,255,0.2);
+		margin-bottom: 8px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-title .sale-title{
+		flex:1;
+		display: inline-block;
+		padding: 0 12px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-title .sale-left-right{
+		flex:1;
+		display: inline-block;
+		border-bottom: 1px solid rgba(255,255,255,0.2);
+		margin-bottom: 8px;
+	}
+	
+	.header .detail .detail-content .detail-content-main .main-sale-content{
+		width: 80%;
+		margin: 0px auto 14px auto;
+		padding: 0 12px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item{
+		margin-bottom: 12px;
+	}
+	
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-text{
+		font-size: 12px;
+		font-weight: 200;
+		color: rgb(255,255,255);
+		line-height: 12px;
+	}
+	
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img{
+		width: 16px;
+		height: 16px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img-sel-0{
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/decrease_2@2x.png);
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 6px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img-sel-1{
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/discount_2@2x.png);
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 6px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img-sel-2{
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/guarantee_2@2x.png);
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 6px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img-sel-3{
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/invoice_2@2x.png);
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 6px;
+	}
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img-sel-4{
+		width: 16px;
+		height: 16px;
+		vertical-align: top;
+		display: inline-block;
+		background-image: url(../../../static/img/special_2@2x.png);
+		background-size: 16px 16px;
+		background-repeat: no-repeat;
+		border-radius: 2px;
+		margin-right: 6px;
+	}
+	.header .detail .detail-content .detail-content-main .main-notice{
+		width: 80%;
+		margin: 0 auto;
+		font-size: 0px;
+	}
+	.header .detail .detail-content .detail-content-main .main-notice-content{
+		font-size: 12px;
+		font-weight: 200;
+		color: rgb(255,255,255);
+		line-height: 24px;
+	}
 </style>

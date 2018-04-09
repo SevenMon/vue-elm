@@ -21,15 +21,19 @@
 			itemstars:function(){
 				let result = []
 				let score = Math.floor(this.score * 2) /2
+				let lastStar = '';
 				for(let i = LENTH ; i > 0 ; i--){
 					score--
+					if(i == 1){
+						lastStar = 'last-star'
+					}
 					if(score > 0 || score == 0){
-						result.push(CLS_ON)
+						result.push(CLS_ON + ' ' + lastStar)
 					}else if(score < 0){
 						if(score < -1){
-							result.push(CLS_OFF)
+							result.push(CLS_OFF + ' ' + lastStar)
 						}else{
-							result.push(CLS_HALF)
+							result.push(CLS_HALF + ' ' + lastStar)
 						}
 					}
 				}
@@ -49,6 +53,9 @@
 		height: 20px;
 		margin-right: 22px;
 		background-size: 20px 20px;
+	}
+	.star-type-24 .last-star{
+		margin-right: 0px;
 	}
 	.star-type-24 .on{
 		background-image: url(../../../static/img/star24_on@2x.png);

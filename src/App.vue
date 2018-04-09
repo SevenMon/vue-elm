@@ -37,7 +37,7 @@
 		name: 'App',
 		data: function() {
 			return {
-				seller: '',
+				seller: {},
 				appblur:false
 			}
 		},
