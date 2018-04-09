@@ -38,7 +38,12 @@
 		</div>
 		<div v-show="showStatus" class="detail">
 			<div class="detail-content clearfix">
-				<div class="detail-content-main"></div>
+				<div class="detail-content-main">
+					<h1 class="main-name">{{ seller.name }}</h1>
+					<div class="star-wrapper">
+						<star :size='size' :score='1.6'></star>
+					</div>
+				</div>
 			</div>
 			<div class="detail-close">
 				<i class="icon-close" @click="closeDetail"></i>
@@ -48,23 +53,28 @@
 </template>
 
 <script>
+	import star from '@/components/star/star.vue'
 	export default {
 		props: ['seller','appblur'],
 		name: 'headerLayout',
 		data:function(){
 			return {
-				showStatus:false
+				showStatus:false,
+				size:24
 			}
 		},
 		methods:{
 			showDetail:function(){
-				this.showStatus = true,
-				this.$emit('emitappblur')
+				this.showStatus = true
+				//this.$emit('emitappblur')
 			},
 			closeDetail:function(){
-				this.showStatus = false,
-				this.$emit('emitappblur')
+				this.showStatus = false
+				//this.$emit('emitappblur')
 			}
+		},
+		components:{
+			star,
 		}
 	}
 </script>
@@ -229,9 +239,22 @@
 	}
 	.header .detail .detail-content{
 		min-height: 100%;
+		width: 100%;
 	}
 	.header .detail .detail-content .detail-content-main{
 		padding: 64px 36px;
+	}
+	.header .detail .detail-content .detail-content-main .main-name{
+		font-size: 16px;
+		font-weight: 700;
+		color: rgb(255,255,255);
+		line-height: 16px;
+		text-align: center;
+	}
+	.header .detail .detail-content .detail-content-main .star-wrapper{
+		margin-top: 18px;
+		padding: 2px 0;
+		text-align: center;
 	}
 	.header .detail .detail-close{
 		width: 32px;
