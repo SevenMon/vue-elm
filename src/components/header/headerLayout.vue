@@ -111,6 +111,7 @@
 		color: rgb(255,255,255);
 		position: relative;
 		overflow: hidden;
+		font-size: 0px;
 	}
 	.header .back-img{
 		position: absolute;
@@ -175,6 +176,7 @@
 		background-size: 30px 18px;
 		background-repeat: no-repeat;
 		border-radius: 2px;
+		margin-right: 6px;
 	}
 
 	.header .header-content .content-info .content-title .title-name{
@@ -259,7 +261,7 @@
 		font-size: 12px;
 		color: rgb(255, 255, 255);
 		font-weight: 200;
-		line-height: 12px;
+		line-height: 14px;
 		display: inline-block;
 		vertical-align: top;
 	}
@@ -272,6 +274,7 @@
 		text-overflow:ellipsis;
 		line-height: 28px;
 		position: relative;
+		font-size: 12px;
 	}
 	.header .header-notice .notice-img{
 		width: 22px;
@@ -376,11 +379,11 @@
 		margin-bottom: 12px;
 	}
 	
-	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-text{
+	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item {
 		font-size: 12px;
 		font-weight: 200;
 		color: rgb(255,255,255);
-		line-height: 12px;
+		line-height: 16px;
 	}
 	
 	.header .detail .detail-content .detail-content-main .main-sale-content .sale-item .sale-img{
