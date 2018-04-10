@@ -38,14 +38,14 @@
 		data: function() {
 			return {
 				seller: {},
-				appblur:false
+				appblur: false
 			}
 		},
 		components: {
 			headerLayout,
 		},
-		methods:{
-			emitappblur:function(){
+		methods: {
+			emitappblur: function() {
 				this.appblur = !this.appblur
 			}
 		}
@@ -85,7 +85,21 @@
 	.tab .item-tab .router-link-active {
 		color: rgb(240, 20, 20);
 	}
-	.appblur{
+	
+	.appblur {
 		filter: blur(10px);
+	}
+	
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: opacity .5s;
+	}
+	
+	.fade-enter,
+	.fade-leave-to
+	/* .fade-leave-active below version 2.1.8 */
+	
+	{
+		opacity: 0;
 	}
 </style>

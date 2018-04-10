@@ -36,7 +36,8 @@
 		<div class="back-img">
 			<img width="100%" height="100%" :src="seller.avatar" />
 		</div>
-		<div v-show="showStatus" class="detail">
+		<transition name='fade'>
+		<div v-show="showStatus" class="detail" tran>
 			<div class="detail-content clearfix">
 				<div class="detail-content-main">
 					<h1 class="main-name">{{ seller.name }}</h1>
@@ -73,6 +74,7 @@
 				<i class="icon-close" @click="closeDetail"></i>
 			</div>
 		</div>
+		</transition>
 	</div>
 </template>
 
