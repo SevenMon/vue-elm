@@ -1,6 +1,6 @@
 <template>
 	<div class="good">
-		<div class="menu-wrapper">
+		<div class="menu-wrapper" ref='menuWrapper'>
 			<ul class="menu-ul">
 				<li v-for="good in goods" class="menu-item">
 					<span class="menu-text">
@@ -11,7 +11,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="foods-wrapper">
+		<div class="foods-wrapper" ref='foodsWrapper'>
 			<ul class="foods-ul">
 				<li v-for="good in goods" class="foods-list">
 					<h1 class="foods-title">{{ good.name }}</h1>
@@ -44,8 +44,20 @@
 </template>
 
 <script>
+	import BTscroll from 'better-scroll'
 	export default{
-		props:['goods']
+		props:['goods'],
+		created:function() {
+			this.$nextTick(function(){
+				this._initScroll()
+			})
+		},
+		methods:{
+			_initScroll:function(){
+				this.menuScroll = new BTscroll(this.$refs.menuWrapper,{})
+				this.menuScroll = new BTscroll(this.$refs.foodsWrapper,{})
+			}
+		}
 	}
 </script>
 
@@ -131,6 +143,7 @@
 	}
 	.good .foods-wrapper{
 		width: 100%;
+		overflow: hidden;
 		
 	}
 	.good .foods-wrapper .foods-ul{
@@ -219,6 +232,8 @@
 		font-size: 10px;
 		font-weight: normal;
 		line-height: 24px;
+		margin-left: 6px;
+		text-decoration:line-through;
 	}
 
 	
