@@ -13,7 +13,7 @@
 		</div>
 		<div class="foods-wrapper" ref='foodsWrapper'>
 			<ul class="foods-ul">
-				<li v-for="good in goods" class="foods-list">
+				<li v-for="good in goods" class="foods-list foods-list-hook">
 					<h1 class="foods-title">{{ good.name }}</h1>
 					<ul class="food-list-ul">
 						<li v-for="food in good.foods" class="food-item">
@@ -47,15 +47,38 @@
 	import BTscroll from 'better-scroll'
 	export default{
 		props:['goods'],
+		data:function(){
+			return {
+				foodsHeights:[]
+			}
+		},
 		created:function() {
 			this.$nextTick(function(){
 				this._initScroll()
+				this._goodsHeighs()
 			})
 		},
 		methods:{
 			_initScroll:function(){
 				this.menuScroll = new BTscroll(this.$refs.menuWrapper,{})
-				this.menuScroll = new BTscroll(this.$refs.foodsWrapper,{})
+				this.goodsScroll = new BTscroll(this.$refs.foodsWrapper,{})
+				this.goodsScroll.on('scroll',function(pos){
+					
+				})
+			},
+			_goodsHeighs:function(){
+				let foodsli = this.$refs.foodsWrapper.getElementsByClassName('foods-list-hook')
+				let heigh = 0
+				console.log(foodsli)
+				console.log(foodsli[0])
+				console.log(foodsli.length)
+				this.foodsHeights.push(heigh)
+				for(let i = 0;i < foodsli.length; i++){
+					let goodheigh = foodsli[i].clientHeight
+					
+					heigh += goodheigh
+					this.foodsHeights.push(heigh)
+				}
 			}
 		}
 	}
