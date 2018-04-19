@@ -13,8 +13,8 @@
 		</div>
 		<div class="foods-wrapper" ref='foodsWrapper'>
 			<ul class="foods-ul">
-				<li v-for="good in goods" class="foods-list foods-list-hook">
-					<h1 class="foods-title">{{ good.name }}</h1>
+				<li v-for="(good, key) in goods" class="foods-list foods-list-hook" :class="">
+					<h1 class="foods-title">{{ good.name }}{{ key }}</h1>
 					<ul class="food-list-ul">
 						<li v-for="food in good.foods" class="food-item">
 							<div class="food-content">
@@ -49,29 +49,49 @@
 		props:['goods'],
 		data:function(){
 			return {
-				foodsHeights:[]
+				foodsHeights:[],
+				scrollY:0,
+				menuIndex:0,
+				ceshi:true
 			}
 		},
 		created:function() {
 			this.$nextTick(function(){
 				this._initScroll()
-				this._goodsHeighs()
+				
 			})
+		},
+		computed:{
+			currentIndex:function(){
+				let currentIndex = 0
+				for(let i = 0;i < this.foodsHeights.length; i++){
+					let height1 = this.foodsHeights[i]
+					let height2 = this.foodsHeights[i + 1]
+					if(this.scrollY >= height1 && this.scrollY < height2){
+						currentIndex = i
+					}else{
+						currentIndex = 0
+					}
+				}
+				return currentIndex
+			}
+		},
+		updated:function(){
+			this._goodsHeighs()
 		},
 		methods:{
 			_initScroll:function(){
 				this.menuScroll = new BTscroll(this.$refs.menuWrapper,{})
-				this.goodsScroll = new BTscroll(this.$refs.foodsWrapper,{})
+				this.goodsScroll = new BTscroll(this.$refs.foodsWrapper,{
+					probeType:3
+				})
 				this.goodsScroll.on('scroll',function(pos){
-					
+					this.scrollY = -pos.y
 				})
 			},
 			_goodsHeighs:function(){
 				let foodsli = this.$refs.foodsWrapper.getElementsByClassName('foods-list-hook')
 				let heigh = 0
-				console.log(foodsli)
-				console.log(foodsli[0])
-				console.log(foodsli.length)
 				this.foodsHeights.push(heigh)
 				for(let i = 0;i < foodsli.length; i++){
 					let goodheigh = foodsli[i].clientHeight
@@ -79,7 +99,8 @@
 					heigh += goodheigh
 					this.foodsHeights.push(heigh)
 				}
-			}
+				console.log(this.foodsHeights)
+			},
 		}
 	}
 </script>
