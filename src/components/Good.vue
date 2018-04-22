@@ -2,18 +2,21 @@
 	<div class="good">
 		<div class="menu-wrapper" ref='menuWrapper'>
 			<ul class="menu-ul">
-				<li v-for="(good, key) in goods" class="menu-item menu-list-hook" :class="{select:currentIndex == key}" :aa="scrollY">
+				<li v-for="(good, key) in goods" class="menu-item menu-list-hook" :class="{select:currentIndex == key}" @click="scrollFood(key)" :aa="scrollY">
 					<span class="menu-text">
 						<span class="menu-icon" :class="'menu-icon-' + good.type">
 						</span> {{ good.name }}
 					</span>
+				</li>
+				<li class="menu-item menu-list-hook">
+
 				</li>
 			</ul>
 		</div>
 		<div class="foods-wrapper" ref='foodsWrapper'>
 			<ul class="foods-ul">
 				<li v-for="(good, key) in goods" class="foods-list foods-list-hook">
-					<h1 class="foods-title">{{ good.name }}{{ key }}</h1>
+					<h1 class="foods-title">{{ good.name }}</h1>
 					<ul class="food-list-ul">
 						<li v-for="food in good.foods" class="food-item">
 							<div class="food-content">
@@ -54,14 +57,14 @@
 				allmenuHeight: 0,
 				scrollY: 0,
 				menuIndex: 0,
-				upSlideIndex:[],
-				downSlideIndex:[],
+				upSlideIndex: [],
+				downSlideIndex: [],
 			}
 		},
 		created() {
 			let goodsHeighs = this._goodsHeighs
 			let menuHeighs = this._menuHeighs
-			let initScroll = this._initScroll 
+			let initScroll = this._initScroll
 			let computedSlideUpDown = this._computedSlideUpDown
 			setTimeout(() => {
 				goodsHeighs()
@@ -91,35 +94,49 @@
 
 		},
 		watch: {　　　　　　　　
-			currentIndex(curVal, oldVal) {　　　　　　　　　　
-				for(let i = 0; i < this.upSlideIndex.length; i++){
-					　　
-					if(this.upSlideIndex[i] == curVal){
-						//上滑
-						if(curVal > oldVal){
-							console.log(curVal)　　
-							console.log(oldVal)
+			currentIndex(curVal, oldVal) {　　　　　
+				if(oldVal == 1 && curVal == 0){
+					this.menuScroll.scrollTo(0, 0, 200)
+				}　　　　　
+				for(let i = 0; i < this.upSlideIndex.length; i++) {　　
+
+					//上滑
+					if(curVal > oldVal) {
+						//console.log(curVal)　　
+						//console.log(oldVal)
+						if(this.upSlideIndex[i] == curVal) {
 							//alert('上滑')
-							this.menuScroll.scrollBy(0,-54,400)
+							this.menuScroll.scrollBy(0, -54, 400)
 						}
-						//下滑
-						if(curVal < oldVal){
-							//alert('下滑')
-							this.menuScroll.scrollBy(0,54,400)
-						}
+
 					}
+					//下滑
+					if(curVal < oldVal) {
+						if(this.upSlideIndex[i] == oldVal) {
+							//alert('下滑')
+							this.menuScroll.scrollBy(0, 54, 400)
+						}
+
+					}
+
 				}　　　
 			}
 		},
 		methods: {
 			_initScroll() {
-				this.menuScroll = new BTscroll(this.$refs.menuWrapper, {})
+				this.menuScroll = new BTscroll(this.$refs.menuWrapper, {
+					click: true
+				})
 				this.goodsScroll = new BTscroll(this.$refs.foodsWrapper, {
-					probeType: 3
+					probeType: 3,
 				})
-				this.goodsScroll.on('scroll', (pos) => {
+
+				this.handel = (pos) => {
 					this.scrollY = -pos.y
-				})
+					console.log()
+				}
+				this.goodsScroll.on('scroll', this.handel)
+
 			},
 			_goodsHeighs() {
 				let foodsli = this.$refs.foodsWrapper.getElementsByClassName('foods-list-hook')
@@ -130,6 +147,7 @@
 					heigh += goodheigh
 					this.foodsHeights.push(heigh)
 				}
+				console.log(this.foodsHeights)
 			},
 			_menuHeighs() {
 				let menuli = this.$refs.menuWrapper.getElementsByClassName('menu-list-hook')
@@ -140,25 +158,34 @@
 					heigh += menuheigh
 					this.menuHeights.push(heigh)
 				}
-				console.log(this.menuHeights)
+				//console.log(this.menuHeights)
 				this.allmenuHeight = this.$refs.menuWrapper.clientHeight
-				console.log(this.allmenuHeight)
+				//console.log(this.allmenuHeight)
 			},
-			_computedSlideUpDown(){
+			_computedSlideUpDown() {
 				let menuh = this.menuHeights
 				let amenuh = this.allmenuHeight
-				let halfamenuh = Math.ceil(amenuh/2)
+				let halfamenuh = Math.ceil(amenuh / 2)
 				//判断是否滑动 
-				if(menuh[menuh.length - 1] > amenuh){
+				if(menuh[menuh.length - 1] > amenuh) {
 					let middleIndex = 0
-					for(let i = 0; i < menuh.length; i++){
-						if(menuh[i] >= halfamenuh && menuh[menuh.length - 1] - menuh[i] > halfamenuh){
+					for(let i = 0; i < menuh.length; i++) {
+						if(menuh[i] >= halfamenuh && menuh[menuh.length - 1] - menuh[i] > halfamenuh) {
 							this.upSlideIndex.push(i)
 						}
 					}
-					
+
 				}
-				console.log(this.upSlideIndex)
+				//console.log(this.upSlideIndex)
+			},
+			scrollFood(index) {
+				this.scrollY = this.foodsHeights[index]
+				this.goodsScroll.off('scroll', this.handel)
+				this.goodsScroll.scrollTo(0, -this.foodsHeights[index], 200)
+				setTimeout(() => {
+					this.goodsScroll.on('scroll', this.handel)
+				}, 400)
+				
 			}
 		}
 	}
@@ -278,9 +305,8 @@
 	.good .foods-wrapper .foods-ul .foods-list .food-list-ul {}
 	
 	.good .foods-wrapper .foods-ul .foods-list .food-list-ul .food-item {
-		margin: 18px;
+		padding: 18px;
 		border-bottom: 1px solid rgba(7, 17, 27, 0.1);
-		padding-bottom: 18px;
 	}
 	
 	.good .foods-wrapper .foods-ul .foods-list .food-list-ul .food-item:last-child {
