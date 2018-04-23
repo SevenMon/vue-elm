@@ -42,14 +42,16 @@
 				</li>
 			</ul>
 		</div>
+		<shop-car :seller="seller"></shop-car>
 	</div>
 
 </template>
 
 <script>
 	import BTscroll from 'better-scroll'
+	import ShopCar from './ShopCar'
 	export default {
-		props: ['goods'],
+		props: ['goods','seller'],
 		data() {
 			return {
 				foodsHeights: [],
@@ -75,6 +77,9 @@
 		},
 		mounted() {
 
+		},
+		components:{
+			ShopCar
 		},
 		computed: {
 			currentIndex() {

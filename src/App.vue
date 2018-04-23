@@ -14,7 +14,7 @@
 				<router-link :to="{path:'/shop'}">商家</router-link>
 			</div>
 		</div>
-		<router-view :goods='goods'></router-view>
+		<router-view :goods='goods' :seller="seller"></router-view>
 	</div>
 </template>
 
