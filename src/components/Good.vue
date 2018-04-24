@@ -42,7 +42,7 @@
 				</li>
 			</ul>
 		</div>
-		<shop-car :seller="seller"></shop-car>
+		<shop-car :seller="seller" :carfoods="carfoods"></shop-car>
 	</div>
 
 </template>
@@ -61,6 +61,11 @@
 				menuIndex: 0,
 				upSlideIndex: [],
 				downSlideIndex: [],
+				carfoods:[{
+					id:1,
+					num:2,
+					price:3.1,
+				}]
 			}
 		},
 		created() {

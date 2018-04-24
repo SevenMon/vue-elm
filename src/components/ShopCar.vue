@@ -2,14 +2,18 @@
 	<div class="shopcar">
 		<div class="car-left">
 			<div class="car-logo">
-				<i class="icon-shopping_cart logo">
+				<i class="icon-shopping_cart logo" :class="{select:count > 0}">
 					
 				</i>
+				<div class="carfoodnum">
+					{{ count }}
+				</div>
 			</div>
 			<div class="car-price">
 				<span class="price">
-					￥100
+					￥{{ allprice }}
 				</span>
+				
 			</div>
 			<div class="car-descri">
 				<span class="descri">
@@ -17,9 +21,9 @@
 				</span>
 			</div>
 		</div>
-		<dir class="car-right">
+		<dir class="car-right" :class="{select: allprice > this.seller.minPrice}">
 			<span class="send-min-price">
-				￥{{ seller.minPrice }}起送
+				{{ countdes }}
 			</span>
 		</dir>
 	</div>
@@ -27,7 +31,36 @@
 
 <script>
 	export default{
-		props: ['seller'],
+		props: ['seller','carfoods'],
+		computed:{
+			allprice(){
+				let allprice = 0
+				this.carfoods.forEach((food)=>{
+					allprice += food.num * food.price
+				})
+				return allprice
+			},
+			count(){
+				let num = 0
+				this.carfoods.forEach((food)=>{
+					num += food.num
+				})
+				return num
+			},
+			countdes(){
+				let countdes = ''
+				let minprice = this.seller.minPrice
+				let allprice = this.allprice
+				if(allprice < minprice){
+					countdes = '还差¥' + (minprice - allprice) + '起送'
+				}else if(allprice >= minprice){
+					countdes = '去结算'
+				}else if(allprice == 0){
+					countdes = '¥' + minprice + '起送'
+				}
+				return countdes
+			}
+		}
 	}
 </script>
 	
@@ -70,6 +103,9 @@
 	border-radius: 50%;
 	display: inline-block;
 }
+.shopcar .car-left .car-logo .select{
+	background-color: rgb(0,160,220);
+}
 .shopcar .car-left .car-price{
 	flex: 0 0 40px;
 	border-right: 1px solid rgba(255,255,255,0.1);
@@ -77,6 +113,20 @@
     position: relative;
     padding-right: 12px;
     overflow: hidden;
+}
+.shopcar .car-left .car-logo .carfoodnum{
+	width: 24px;
+    line-height: 16px;
+    font-size: 9px;
+    color: rgb(250,250,250);
+    background: rgb(250,20,20);
+    border-radius: 16px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: 700;
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.4);
 }
 .shopcar .car-left .car-price .price{
 	font-size: 16px;
@@ -104,6 +154,13 @@
 	padding: 12px 8px;
 	text-align: center;
 	background-color: rgb(43,51,59);
+}
+.shopcar .select{
+	background-color: #56d176;
+	color: #fff;
+	font-weight: 700;
+	font-size: 12px;
+	line-height: 24px;
 }
 .shopcar .car-right .send-min-price{
 	font-size: 12px;
