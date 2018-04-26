@@ -37,6 +37,7 @@
 									</div>
 								</div>
 							</div>
+							<add-dess :num.sync="food.num" @addnum="addnum(food)" @desnum="desnum(food)"></add-dess>
 						</li>
 					</ul>
 				</li>
@@ -48,8 +49,10 @@
 </template>
 
 <script>
+	import Vue from 'vue'
 	import BTscroll from 'better-scroll'
 	import ShopCar from './ShopCar'
+	import AddDess from './adddess/adddess'
 	export default {
 		props: ['goods','seller'],
 		data() {
@@ -60,12 +63,7 @@
 				scrollY: 0,
 				menuIndex: 0,
 				upSlideIndex: [],
-				downSlideIndex: [],
-				carfoods:[{
-					id:1,
-					num:2,
-					price:3.1,
-				}]
+				downSlideIndex: []
 			}
 		},
 		created() {
@@ -84,7 +82,8 @@
 
 		},
 		components:{
-			ShopCar
+			ShopCar,
+			AddDess
 		},
 		computed: {
 			currentIndex() {
@@ -98,6 +97,19 @@
 					}
 				}
 				return 0
+			},
+			carfoods(){
+				let carlist = []
+				for(let i = 0; i < this.goods.length ; i++){
+					for(let j = 0; j < this.goods[i].foods.length ; j++){
+						if(this.goods[i].foods[j].num > 0){
+							carlist.push(
+								this.goods[i].foods[j]
+							)
+						}
+					}
+				}
+				return carlist
 			}
 		},
 		updated() {
@@ -139,6 +151,7 @@
 				})
 				this.goodsScroll = new BTscroll(this.$refs.foodsWrapper, {
 					probeType: 3,
+					click: true
 				})
 
 				this.handel = (pos) => {
@@ -196,6 +209,20 @@
 					this.goodsScroll.on('scroll', this.handel)
 				}, 400)
 				
+			},
+			addnum(food){
+				if(isNaN(food.num)){
+					Vue.set(food,'num',1)
+				}else{
+					food.num ++
+				}
+			},
+			desnum(food){
+				if(isNaN(food.num)){
+					Vue.set(food,'num',0)
+				}else{
+					food.num --
+				}
 			}
 		}
 	}
@@ -317,6 +344,7 @@
 	.good .foods-wrapper .foods-ul .foods-list .food-list-ul .food-item {
 		padding: 18px;
 		border-bottom: 1px solid rgba(7, 17, 27, 0.1);
+		position: relative;
 	}
 	
 	.good .foods-wrapper .foods-ul .foods-list .food-list-ul .food-item:last-child {
