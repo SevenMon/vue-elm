@@ -237,7 +237,6 @@
 		bottom: 46px;
 		font-size: 0px;
 	}
-	
 	.good .menu-wrapper {
 		flex: 0 0 80px;
 		background-color: #f3f5f7;

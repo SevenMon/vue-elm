@@ -1,8 +1,8 @@
 <template>
 	<div class="adddes">
 		<div class="des" @click="des">
-			<transition name="fade">
-				<i v-if="num  > 0" class="icon-remove_circle_outline"></i>
+			<transition name="fade-roll">
+				<i v-if="num > 0" class="icon-remove_circle_outline desicon"></i>
 			</transition>
 		</div>
 		<div class="num">
@@ -55,7 +55,9 @@
 		display: inline-block;
 		font-size: 24px;
 	}
-	
+	.adddes .des i{
+		display: inline-block;
+	}
 	.adddes .num {
 		display: inline-block;
 		font-size: 10px;
@@ -71,19 +73,16 @@
 		font-size: 24px;
 	}
 	
-	.fade-enter-active,
-	.fade-leave-active {
-		transition: all 2s;
-		-moz-transition:all 2s; /* Firefox 4 */
-		-webkit-transition:all 2s; /* Safari and Chrome */
-		-o-transition:all 2s; /* Opera */
+	.fade-roll-enter-active,
+	.fade-roll-leave-active {
+		transition: all 1s;
 	}
 	
-	.fade-enter,
-	.fade-leave-to
+	.fade-roll-enter,
+	.fade-roll-leave-to
 	/* .fade-leave-active below version 2.1.8 */
-	
 	{
-		transform: translate3D(24px,0,0);
+		transform:translate(24px,0px) rotate(180deg);
+		opacity: 0;
 	}
 </style>
