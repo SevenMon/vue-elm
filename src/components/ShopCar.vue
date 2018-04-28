@@ -28,27 +28,43 @@
 			</span>
 			</dir>
 		</div>
-		<div class="back-wall">
+		<div v-show="carshow" class="back-wall" @click="carshow = !carshow">
 
 		</div>
 		<transition name="fade-car-list">
-			<div v-if="carshow" class="car-list">
+			<div v-show="carshow" class="car-list">
 				<p class="car-title"><span class="title">购物车</span><span class="del-car">清空</span></p>
-				<ul class="car-food-list" ref='carWrapper'>
-					<li v-for="(food, key) in carfoods" class="car-food-item">
-						<div class="car-food-content">
-							<span class="food-title">{{ food.name }}</span>
-						</div>
-					</li>
-				</ul>
+				<div class="car-list-content" ref='gefengWrapper'>
+					<ul class="car-food-list">
+						<li v-for="(food, key) in carfoods" class="car-food-item">
+							<div class="car-food-content">
+								<span class="food-title">{{ food.name }}</span>
+								<span class="food-price"><span class="money-code">￥</span>{{ food.price * food.num }}</span>
+								<add-dess :num.sync="food.num" @addnum="addnum(food)" @desnum="desnum(food)" class="car-list-adddess"></add-dess>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</transition>
 	</div>
 </template>
 
 <script>
+	import Vue from 'vue'
+	import AddDess from './adddess/adddess'
+	import BTscroll from 'better-scroll'
 	export default {
 		props: ['seller', 'carfoods'],
+		created() {
+			let carListRoll = this._initScroll
+			setTimeout(() => {
+				carListRoll()
+			}, 200)
+		},
+		components: {
+			AddDess
+		},
 		computed: {
 			allprice() {
 				let allprice = 0
@@ -62,6 +78,7 @@
 				this.carfoods.forEach((food) => {
 					num += food.num
 				})
+				if(num == 0)this.carshow = false
 				return num
 			},
 			countdes() {
@@ -78,20 +95,37 @@
 				return countdes
 			}
 		},
-		data(){
-			return{
-				carshow:false
+		data() {
+			return {
+				carshow: false
 			}
 		},
-		methods:{
-
+		methods: {
+			_initScroll() {
+				console.log(this)
+				this.carScroll = new BTscroll(this.$refs.gefengWrapper, {
+					click: true
+				})
+			},
+			addnum(food) {
+				if(isNaN(food.num)) {
+					Vue.set(food, 'num', 1)
+				} else {
+					food.num++
+				}
+			},
+			desnum(food) {
+				if(isNaN(food.num)) {
+					Vue.set(food, 'num', 0)
+				} else {
+					food.num--
+				}
+			}
 		}
 	}
 </script>
 
 <style>
-	
-
 	.shopcar {
 		position: fixed;
 		bottom: 0px;
@@ -120,64 +154,112 @@
 		filter: blur(10px);
 		background-color: rgba(7, 17, 27, 0.6);
 		z-index: 50;
-		display: none;
 	}
 	
 	.shopcar .car-list {
 		z-index: 60;
-	    position: absolute;
-	    top: 0;
-	    left: 0;
-	    width: 100%;
-	    max-height: 500px;
-	    transform:translate(0,-100%);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		max-height: 290px;
+		background-color: #f3f5f7;
 	}
-	.fade-car-list-enter-active, .fade-car-list-leave-active {
-		transition: all 5s;
+	.shopcar .car-list .car-list-content{
+		width: 100%;
+		max-height: 249px;
+		overflow: hidden;
+	}
+	.car-list {
+		transform: translate(0, -100%);
 	}
 	
-
-	.fade-car-list-enter, .fade-car-list-leave
+	.fade-car-list-enter-active {
+		transition: all 0.5s;
+	}
+	
+	.fade-car-list-leave-active {
+		transition: all 0.5s;
+		transform: translate(0, 0);
+	}
+	
+	.fade-car-list-enter,
+	.fade-car-list-leave
 	/* .fade-leave-active below version 2.1.8 */
+	
 	{
-		transform:translate(0,0);
+		transform: translate(0, 0);
 		/*transform:translate(0,-100%);*/
 	}
 	
-	.shopcar .car-list .car-title{
+	.shopcar .car-list .car-title {
 		background-color: #f3f5f7;
 		height: 40px;
-		border-bottom: 1px solid rgba(7,17,27,0.1);
+		border-bottom: 1px solid rgba(7, 17, 27, 0.1);
 	}
-	.shopcar .car-list .car-title .title{
+	
+	.shopcar .car-list .car-title .title {
 		font-size: 14px;
 		font-weight: 200;
-		color: rgb(7,17,27);
+		color: rgb(7, 17, 27);
 		line-height: 40px;
 		margin-left: 18px;
 	}
-	.shopcar .car-list .car-title .del-car{
+	
+	.shopcar .car-list .car-title .del-car {
 		font-size: 12px;
-		color: rgb(0,160,220);
+		color: rgb(0, 160, 220);
 		line-height: 40px;
 		margin-right: 18px;
 		float: right;
 	}
 	
-	.shopcar .car-list .car-food-list{
-		background-color: rgb(255,255,255);
+	.shopcar .car-list .car-food-list {
+		background-color: rgb(255, 255, 255);
 		width: 100%;
-		padding-bottom: 60px;
 	}
 	
-	.shopcar .car-list .car-food-list .car-food-item{
-		
+	.shopcar .car-list .car-food-list .car-food-item {
+		height: 48px;
+		font-size: 0px;
 	}
-	.shopcar .car-list .car-food-list .car-food-item .car-food-content{
-		
+	
+	.shopcar .car-list .car-food-list .car-food-item .car-food-content {
+		padding: 12px 0;
+		margin: 0 18px;
+		border-bottom: 1px solid rgb(7, 17, 27, 0.1);
+		position: relative;
 	}
-	.shopcar .car-list .car-food-list .car-food-item .car-food-content .food-title{
-		
+	
+	.shopcar .car-list .car-food-list .car-food-item .car-food-content .car-list-adddess {
+		top: 13px;
+	}
+	
+	.shopcar .car-list .car-food-list .car-food-item .car-food-content .food-title {
+		font-size: 14px;
+		color: rgb(7, 17, 27);
+		line-height: 24px;
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		display: inline-block;
+		width: 50%;
+		vertical-align: top;
+	}
+	
+	.shopcar .car-list .car-food-list .car-food-item .car-food-content .food-price {
+		font-size: 14px;
+		color: rgb(240, 20, 20);
+		line-height: 24px;
+		font-weight: 700;
+	}
+	
+	.shopcar .car-list .car-food-list .car-food-item .car-food-content .food-price .money-code {
+		font-size: 10px;
+		color: rgb(240, 20, 20);
+		line-height: 24px;
+		font-weight: normal;
 	}
 	
 	.shopcar .content .car-left {
